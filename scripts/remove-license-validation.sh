@@ -1,8 +1,6 @@
-#!/bin/bash
+#!/bin/sh
 
 # Script to remove validateLicense implementation from @nuxt/ui-pro
-
-set -e
 
 # Check if node_modules exists
 if [ ! -d "node_modules" ]; then
@@ -19,26 +17,25 @@ if [ ! -d "$UI_PRO_DIR" ]; then
 fi
 
 # Find ui-pro.*.mjs files
-UI_PRO_FILES=$(find "$UI_PRO_DIR" -name "ui-pro.*.mjs" 2>/dev/null || true)
+for file in "$UI_PRO_DIR"/ui-pro.*.mjs; do
+    if [ ! -f "$file" ]; then
+        echo "⚠️  No ui-pro.*.mjs files found."
+        exit 0
+    fi
 
-if [ -z "$UI_PRO_FILES" ]; then
-    echo "⚠️  No ui-pro.*.mjs files found."
-    exit 0
-fi
-
-# Process each file
-for file in $UI_PRO_FILES; do
     if grep -q "async function validateLicense" "$file"; then
         echo "🔧 Removing license validation from: $file"
 
-        # Replace validateLicense function directly
-        sed -i.tmp '/^async function validateLicense/,/^}$/c\
-async function validateLicense(opts) {\
+        # Create a temporary file
+        temp_file="${file}.tmp"
+        
+        # Process the file using sed with POSIX-compliant syntax
+        sed 's/async function validateLicense[^}]*}/async function validateLicense(opts) {\
   return Promise.resolve();\
-}' "$file"
-
-        # Remove temp file
-        rm -f "${file}.tmp"
+}/' "$file" > "$temp_file"
+        
+        # Replace original with temporary file
+        mv "$temp_file" "$file"
 
         echo "✅ License validation removed"
     fi
