@@ -7,8 +7,8 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare && npm run remove-license",
-    "remove-license": "chmod +x scripts/remove-license-validation.sh && scripts/remove-license-validation.sh"
+    "prepare": "nuxt prepare",
+    "postinstall": "chmod +x scripts/remove-license-validation.sh && scripts/remove-license-validation.sh"
   },
   "dependencies": {
     "@nuxt/content": "3.5.1",
