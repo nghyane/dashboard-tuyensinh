@@ -8,7 +8,6 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "prepare": "nuxt prepare",
-    "postinstall": "chmod +x scripts/remove-license-validation.sh && scripts/remove-license-validation.sh"
   },
   "dependencies": {
     "@nuxt/content": "3.5.1",
